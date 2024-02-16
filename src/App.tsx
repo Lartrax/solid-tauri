@@ -48,10 +48,6 @@ const App: Component = () => {
 
   invoke<string>("save").then((res) => setSaveText(res));
 
-  const logger = (log: any) => {
-    invoke("log", { log: JSON.stringify(log) });
-  };
-
   return (
     <div class={styles.App}>
       <header class={styles.header}>
