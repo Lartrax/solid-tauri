@@ -10,6 +10,9 @@ fn save() -> String {
 fn word_distance(first: &str, second: &str) -> u32 {
     println!("__________________");
 
+    let mut first = first;
+    let mut second = second;
+
     if first == second {
         return 0;
     }
@@ -26,11 +29,8 @@ fn word_distance(first: &str, second: &str) -> u32 {
 
     for (i, cf) in first.chars().enumerate() {
         for (j, cs) in second.chars().enumerate() {
-            println!("{cf}, {cs}, {points}");
-            if cf == cs {
-                points -= 1;
-                break;
-            }
+            // Action: Use; Because chars are the same and at the same index
+            if cf == cs && i == j {}
         }
     }
 
