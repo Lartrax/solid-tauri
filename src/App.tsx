@@ -10,6 +10,7 @@ import logo from "./logo.svg";
 import styles from "./App.module.css";
 
 import { invoke } from "@tauri-apps/api";
+import { logger } from "./functions";
 
 const App: Component = () => {
   const [saveText, setSaveText] = createSignal("");
@@ -29,7 +30,7 @@ const App: Component = () => {
   const getFilteredFoods = async () => {
     const filteredFoods = await Promise.all(
       foods.map(async (food) => {
-        const distance = await invoke<number>("levenshtein_distance", {
+        const distance = await invoke<number>("word_distance", {
           first: search(),
           second: food,
         });
@@ -42,6 +43,7 @@ const App: Component = () => {
   };
 
   createEffect(async () => {
+    logger("_________________");
     const filteredFoods = await getFilteredFoods();
     setFilteredFoods(filteredFoods);
   });

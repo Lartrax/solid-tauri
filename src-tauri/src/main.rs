@@ -7,10 +7,33 @@ fn save() -> String {
 }
 
 #[tauri::command]
-fn levenshtein_distance(first: &str, second: &str) -> u32 {
+fn word_distance(first: &str, second: &str) -> u32 {
+    println!("__________________");
+
     if first == second {
         return 0;
     }
+
+    let first_len = first.chars().count();
+    let second_len = second.chars().count();
+
+    // Set maximum difference to length of largest word
+    let mut points = if first_len > second_len {
+        first_len
+    } else {
+        second_len
+    };
+
+    for (i, cf) in first.chars().enumerate() {
+        for (j, cs) in second.chars().enumerate() {
+            println!("{cf}, {cs}, {points}");
+            if cf == cs {
+                points -= 1;
+                break;
+            }
+        }
+    }
+
     1
 }
 
@@ -21,7 +44,7 @@ fn log(log: &str) {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![save, levenshtein_distance, log])
+        .invoke_handler(tauri::generate_handler![save, word_distance, log])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
