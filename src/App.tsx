@@ -1,15 +1,9 @@
-import {
-  For,
-  createEffect,
-  createSignal,
-  type Component,
-} from "solid-js";
+import { For, createEffect, createSignal, type Component } from "solid-js";
 
 import logo from "./logo.svg";
 import styles from "./App.module.css";
 
 import { invoke } from "@tauri-apps/api";
-import { logger } from "./functions";
 
 const App: Component = () => {
   const [saveText, setSaveText] = createSignal("");
@@ -33,16 +27,15 @@ const App: Component = () => {
           first: search(),
           second: food,
         });
-        if (distance < 1) {
-          return food;
+        if (distance < search().length - (search().length - 3)) {
+          return { food, distance };
         }
       })
     );
-    return foods.filter((_, index) => filteredFoods[index]);
+    return foods.filter((_, index) => filteredFoods[index]?.food);
   };
 
   createEffect(async () => {
-    logger("_________________");
     const filteredFoods = await getFilteredFoods();
     setFilteredFoods(filteredFoods);
   });

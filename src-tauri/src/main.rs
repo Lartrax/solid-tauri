@@ -7,34 +7,73 @@ fn save() -> String {
 }
 
 #[tauri::command]
-fn word_distance(first: &str, second: &str) -> u32 {
-    println!("__________________");
-
-    let mut first = first;
-    let mut second = second;
-
-    if first == second {
-        return 0;
-    }
-
-    let first_len = first.chars().count();
-    let second_len = second.chars().count();
-
-    // Set maximum difference to length of largest word
-    let mut points = if first_len > second_len {
-        first_len
+fn word_distance(first: &str, second: &str) -> f32 {
+    // Set base to longest
+    let base: Vec<char> = if first.len() > second.len() {
+        first.chars().collect()
     } else {
-        second_len
+        second.chars().collect()
     };
 
-    for (i, cf) in first.chars().enumerate() {
-        for (j, cs) in second.chars().enumerate() {
+    let comp: Vec<char> = if first.len() > second.len() {
+        second.chars().collect()
+    } else {
+        first.chars().collect()
+    };
+
+    let mut distance = 0.0;
+
+    #[derive(Debug, Clone)]
+    struct Moves {
+        use_char: bool,
+        move_char: (bool, usize),
+        add_char: bool,
+    }
+
+    let mut movement_construct = vec![
+        Moves {
+            use_char: false,
+            move_char: (false, 0),
+            add_char: false
+        };
+        base.len()
+    ];
+
+    for (i, base_char) in base.clone().into_iter().enumerate() {
+        for (j, comp_char) in comp.clone().into_iter().enumerate() {
             // Action: Use; Because chars are the same and at the same index
-            if cf == cs && i == j {}
+            if base_char == comp_char && i == j {
+                movement_construct[i].use_char = true;
+            }
+
+            // Action: Move; Because chars are the same but indices are different
+            if base_char == comp_char && i != j {
+                let diff = i.abs_diff(j);
+                movement_construct[i].move_char.0 = true;
+                movement_construct[i].move_char.1 = diff;
+            }
+
+            // Action: Add; Because char does not exist in comp
+            if base_char != comp_char {
+                movement_construct[i].add_char = true;
+            }
         }
     }
 
-    1
+    // Calcualte cost based on best moves: use > move > add
+    for movement in movement_construct.clone() {
+        if movement.use_char {
+            // No distance added
+        } else if movement.move_char.0 && movement.move_char.1 < 3 {
+            // Add 0.5 for each index moved
+            distance += movement.move_char.1 as f32 * 0.5
+        } else if movement.add_char {
+            // Add 1 for adding new char
+            distance += 1.0
+        }
+    }
+
+    distance
 }
 
 #[tauri::command]
