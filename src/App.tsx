@@ -18,6 +18,22 @@ const App: Component = () => {
     "elderberry",
     "fig",
     "grape",
+    "honeydew",
+    "kiwi",
+    "lemon",
+    "mango",
+    "nectarine",
+    "orange",
+    "pear",
+    "quince",
+    "raspberry",
+    "strawberry",
+    "tangerine",
+    "ugli",
+    "watermelon",
+    "xigua",
+    "yuzu",
+    "zucchini",
   ];
 
   const getFilteredFoods = async () => {
@@ -27,7 +43,7 @@ const App: Component = () => {
           first: search(),
           second: food,
         });
-        if (distance < search().length - (search().length - 3)) {
+        if (distance < Math.min(Math.max(search().length - 2, 2), 5)) {
           return { food, distance };
         }
       })
@@ -65,11 +81,25 @@ const App: Component = () => {
           }}
         >
           <input
-            style={{ "padding-left": "4px" }}
+            style={{
+              "padding-left": "4px",
+              width: "50%",
+              "align-self": "center",
+            }}
             onInput={(e) => setSearch(e.target.value)}
             placeholder="Search..."
           />
-          <For each={filteredFoods()}>{(food) => <span>{food}</span>}</For>
+          <div
+            style={{
+              display: "flex",
+              "column-gap": "1em",
+              "flex-wrap": "wrap",
+              "align-self": "center",
+              width: "50%",
+            }}
+          >
+            <For each={filteredFoods()}>{(food) => <span>{food}</span>}</For>
+          </div>
         </div>
       </header>
     </div>

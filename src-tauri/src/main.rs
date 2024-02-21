@@ -8,17 +8,23 @@ fn save() -> String {
 
 #[tauri::command]
 fn word_distance(first: &str, second: &str) -> f32 {
+    // If first is 3 og larger we check if second contains first
+    // This way we avoid calculating distance for obvious words
+    if second.contains(first) && first.len() > 2 {
+        return 0.0;
+    }
+
     // Set base to longest
     let base: Vec<char> = if first.len() > second.len() {
-        first.chars().collect()
+        first.to_lowercase().chars().collect()
     } else {
-        second.chars().collect()
+        second.to_lowercase().chars().collect()
     };
 
     let comp: Vec<char> = if first.len() > second.len() {
-        second.chars().collect()
+        second.to_lowercase().chars().collect()
     } else {
-        first.chars().collect()
+        first.to_lowercase().chars().collect()
     };
 
     let mut distance = 0.0;
@@ -65,8 +71,9 @@ fn word_distance(first: &str, second: &str) -> f32 {
         if movement.use_char {
             // No distance added
         } else if movement.move_char.0 && movement.move_char.1 < 3 {
-            // Add 0.5 for each index moved
-            distance += movement.move_char.1 as f32 * 0.5
+            // Only move chars if it is less costly than adding /\
+            // Add 0.4 for each index moved
+            distance += movement.move_char.1 as f32 * 0.4
         } else if movement.add_char {
             // Add 1 for adding new char
             distance += 1.0
