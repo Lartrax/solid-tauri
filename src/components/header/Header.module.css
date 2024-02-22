@@ -1,0 +1,52 @@
+.header {
+  z-index: 1;
+  height: 32px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  border-bottom: #0001 1.5px solid;
+  display: flex;
+}
+
+.button {
+  background-color: rgba(255, 255, 255, 0%);
+  height: auto;
+  width: 48px;
+  transition-duration: 200ms;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  line-height: 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.button:hover {
+  background-color: rgba(0, 0, 0, 10%);
+}
+
+.button:active {
+  background-color: rgba(0, 0, 0, 20%);
+}
+
+.buttonX {
+  background-color: rgba(255, 255, 255, 0%);
+  height: auto;
+  width: 48px;
+  transition-duration: 200ms;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  line-height: 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.buttonX:hover {
+  background-color: rgba(200, 40, 0, 100%);
+  color: #fff;
+}
+
+.buttonX:active {
+  background-color: rgba(200, 40, 0, 80%);
+}
