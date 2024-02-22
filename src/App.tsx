@@ -4,6 +4,7 @@ import logo from "./logo.svg";
 import styles from "./App.module.css";
 
 import { invoke } from "@tauri-apps/api";
+import { appWindow } from "@tauri-apps/api/window";
 
 const App: Component = () => {
   const [saveText, setSaveText] = createSignal("");
@@ -58,8 +59,35 @@ const App: Component = () => {
 
   invoke<string>("save").then((res) => setSaveText(res));
 
+  const dragWindow = async () => {
+    await appWindow.startDragging();
+  };
+
   return (
     <div class={styles.App}>
+      <div
+        style={{
+          "z-index": 1,
+          height: "32px",
+          width: "100%",
+          position: "fixed",
+          top: 0,
+          "background-color": "rgba(255, 255, 255, 0%)",
+          display: "flex",
+          "justify-content": "flex-end",
+        }}
+        onPointerDown={dragWindow}
+      >
+        <div class={styles.button} style={{ "font-size": "0.7em" }}>
+          —
+        </div>
+        <div class={styles.button} style={{ "font-size": "1.1em" }}>
+          ◻
+        </div>
+        <div class={styles.buttonX} style={{ "font-size": "1em" }}>
+          ✕
+        </div>
+      </div>
       <header class={styles.header}>
         <img src={logo} class={styles.logo} alt="logo" />
         <p>

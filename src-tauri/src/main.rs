@@ -88,8 +88,18 @@ fn log(log: &str) {
     println!("{}", log)
 }
 
+use tauri::Manager;
+use window_vibrancy::apply_acrylic;
+
 fn main() {
     tauri::Builder::default()
+        .setup(|app| {
+            let window = app.get_window("main").unwrap();
+
+            let _ = apply_acrylic(&window, Some((0, 0, 0, 10)));
+
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![save, word_distance, log])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
