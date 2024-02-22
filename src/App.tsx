@@ -2,14 +2,18 @@ import { For, createEffect, createSignal, type Component } from "solid-js";
 
 import logo from "./logo.svg";
 import styles from "./App.module.css";
+import { logger } from "./functions";
+import icon from "./assets/icon.ico";
 
 import { invoke } from "@tauri-apps/api";
 import { appWindow } from "@tauri-apps/api/window";
+
 
 const App: Component = () => {
   const [saveText, setSaveText] = createSignal("");
   const [search, setSearch] = createSignal("");
   const [filteredFoods, setFilteredFoods] = createSignal<string[]>([]);
+  const [isMaximized, setIsMaximized] = createSignal(false);
 
   const foods = [
     "apple",
@@ -62,6 +66,22 @@ const App: Component = () => {
   const dragWindow = async () => {
     await appWindow.startDragging();
   };
+  const maximizeWindow = async () => {
+    if (await appWindow.isMaximized()) {
+      setIsMaximized(false);
+      await appWindow.unmaximize();
+    } else {
+      setIsMaximized(true);
+      await appWindow.maximize();
+    }
+
+  };
+  const minimizeWindow = async () => {
+    await appWindow.minimize();
+  };
+  const closeWindow = async () => {
+    await appWindow.close();
+  };
 
   return (
     <div class={styles.App}>
@@ -72,19 +92,20 @@ const App: Component = () => {
           width: "100%",
           position: "fixed",
           top: 0,
-          "background-color": "rgba(255, 255, 255, 0%)",
-          display: "flex",
-          "justify-content": "flex-end",
+          "background-color": "rgba(255, 255, 255, 20%)",
+          display: "flex"
         }}
-        onPointerDown={dragWindow}
       >
-        <div class={styles.button} style={{ "font-size": "0.7em" }}>
+        <div onPointerDown={dragWindow} style={{ display: "flex", "flex-grow": 1, "align-items": "center" }}>
+          <img src={icon} style={{ height: "26px", "margin-left": "4px" }} />
+        </div>
+        <div class={styles.button} onClick={minimizeWindow} style={{ "font-size": "0.7em" }}>
           —
         </div>
-        <div class={styles.button} style={{ "font-size": "1.1em" }}>
-          ◻
+        <div class={styles.button} onClick={maximizeWindow} style={{ "font-size": "1.1em" }}>
+          {isMaximized() ? "◱" : "◻"}
         </div>
-        <div class={styles.buttonX} style={{ "font-size": "1em" }}>
+        <div class={styles.buttonX} onClick={closeWindow} style={{ "font-size": "1em" }}>
           ✕
         </div>
       </div>

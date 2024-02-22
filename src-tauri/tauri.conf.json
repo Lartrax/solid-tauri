@@ -15,11 +15,11 @@
       "window": {
         "all": false,
         "center": false,
-        "close": false,
+        "close": true,
         "create": false,
         "hide": false,
-        "maximize": false,
-        "minimize": false,
+        "maximize": true,
+        "minimize": true,
         "print": false,
         "requestUserAttention": false,
         "setAlwaysOnTop": false,
@@ -45,7 +45,7 @@
         "setTitle": false,
         "show": false,
         "startDragging": true,
-        "unmaximize": false,
+        "unmaximize": true,
         "unminimize": false
       }
     },

@@ -9,7 +9,6 @@
 }
 
 .header {
-  background-color: #282c3488;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -17,7 +16,6 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  margin-top: 1.5em;
 }
 
 .link {
@@ -47,9 +45,12 @@
   user-select: none;
 }
 
-
 .button:hover {
   background-color: rgba(0, 0, 0, 10%);
+}
+
+.button:active {
+  background-color: rgba(0, 0, 0, 20%);
 }
 
 .buttonX {
@@ -65,8 +66,11 @@
   user-select: none;
 }
 
-
 .buttonX:hover {
-  background-color: rgba(200, 0, 0, 80%);
+  background-color: rgba(200, 40, 0, 100%);
   color: #fff;
+}
+
+.buttonX:active {
+  background-color: rgba(200, 40, 0, 80%);
 }
