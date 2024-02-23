@@ -31,6 +31,7 @@
 
 .menuItem:active {
   background-color: #0002;
+  scale: 0.95;
 }
 
 .button {

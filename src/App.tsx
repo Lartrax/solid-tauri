@@ -62,7 +62,7 @@ const App: Component = () => {
   return (
     <div class={styles.App}>
       <Header />
-      <div class={styles.content}>
+      <div style={{ display: "flex", "flex-direction": "column", gap: "1em" }}>
         <img src={logo} class={styles.logo} alt="logo" />
         <p>
           Edit <code>src/App.tsx</code> and save to {saveText()}.
@@ -76,22 +76,14 @@ const App: Component = () => {
           Learn Solid
         </a>
         <div
-          style={{
-            display: "flex",
-            "flex-direction": "column",
-            "margin-top": "1em",
-          }}
+          style={{ display: "flex", "flex-direction": "column", gap: "1em" }}
         >
           <input
-            style={{
-              "padding-left": "4px",
-              width: "50%",
-              "align-self": "center",
-            }}
+            class={styles.search}
             onInput={(e) => setSearch(e.target.value)}
             placeholder="Search..."
           />
-          <div style={{ display: "flex", "flex-direction": "column" }}>
+          <div class={styles.scrollBox}>
             <For each={filteredFoods()}>{(food) => <span>{food}</span>}</For>
           </div>
         </div>
