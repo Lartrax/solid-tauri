@@ -6,23 +6,47 @@
   top: 0;
   border-bottom: #0001 1.5px solid;
   display: flex;
+  color: #555;
+
+}
+
+.menuItem {
+  height: 26px;
+  width: 26px;
+  margin-left: 4px;
+  border-radius: 20%;
+  cursor: pointer;
+  user-select: none;
+  line-height: 21px;
+  font-size: 24px;
+  background-color: #fff1;
+  border: #0002 1.5px solid;
+  transition-duration: 200ms;
+}
+
+.menuItem:hover {
+  background-color: #0001;
+  color: #333;
+}
+
+.menuItem:active {
+  background-color: #0002;
 }
 
 .button {
-  background-color: rgba(255, 255, 255, 0%);
   height: auto;
   width: 48px;
   transition-duration: 200ms;
-  justify-content: center;
   display: flex;
   flex-direction: column;
-  line-height: 0;
+  justify-content: center;
   cursor: pointer;
   user-select: none;
 }
 
 .button:hover {
   background-color: rgba(0, 0, 0, 10%);
+  color: #222;
 }
 
 .button:active {

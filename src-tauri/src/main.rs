@@ -8,7 +8,7 @@ fn save() -> String {
 
 #[tauri::command]
 fn word_distance(first: &str, second: &str) -> f32 {
-    // If first is 3 og larger we check if second contains first
+    // If first is 3 or larger we check if second contains first
     // This way we avoid calculating distance for obvious words
     if second.contains(first) && first.len() > 2 {
         return 0.0;

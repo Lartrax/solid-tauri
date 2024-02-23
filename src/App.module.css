@@ -9,10 +9,16 @@
   background-color: #fff4;
 }
 
+.content {
+  margin-top: 32px;
+}
+
 .logo {
   animation: logo-spin infinite 20s linear;
   height: 10em;
   pointer-events: none;
+  user-select: none;
+  margin-top: 2em;
 }
 
 .link {

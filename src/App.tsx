@@ -6,7 +6,6 @@ import styles from "./App.module.css";
 import { invoke } from "@tauri-apps/api";
 import { Header } from "./components/header/header";
 
-
 const App: Component = () => {
   const [saveText, setSaveText] = createSignal("");
   const [search, setSearch] = createSignal("");
@@ -63,44 +62,38 @@ const App: Component = () => {
   return (
     <div class={styles.App}>
       <Header />
-      <img src={logo} class={styles.logo} alt="logo" />
-      <p>
-        Edit <code>src/App.tsx</code> and save to {saveText()}.
-      </p>
-      <a
-        class={styles.link}
-        href="https://github.com/solidjs/solid"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Learn Solid
-      </a>
-      <div
-        style={{
-          display: "flex",
-          "flex-direction": "column",
-          "margin-top": "1em",
-        }}
-      >
-        <input
-          style={{
-            "padding-left": "4px",
-            width: "50%",
-            "align-self": "center",
-          }}
-          onInput={(e) => setSearch(e.target.value)}
-          placeholder="Search..."
-        />
+      <div class={styles.content}>
+        <img src={logo} class={styles.logo} alt="logo" />
+        <p>
+          Edit <code>src/App.tsx</code> and save to {saveText()}.
+        </p>
+        <a
+          class={styles.link}
+          href="https://github.com/solidjs/solid"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn Solid
+        </a>
         <div
           style={{
             display: "flex",
-            "column-gap": "1em",
-            "flex-wrap": "wrap",
-            "align-self": "center",
-            width: "50%",
+            "flex-direction": "column",
+            "margin-top": "1em",
           }}
         >
-          <For each={filteredFoods()}>{(food) => <span>{food}</span>}</For>
+          <input
+            style={{
+              "padding-left": "4px",
+              width: "50%",
+              "align-self": "center",
+            }}
+            onInput={(e) => setSearch(e.target.value)}
+            placeholder="Search..."
+          />
+          <div style={{ display: "flex", "flex-direction": "column" }}>
+            <For each={filteredFoods()}>{(food) => <span>{food}</span>}</For>
+          </div>
         </div>
       </div>
     </div>
