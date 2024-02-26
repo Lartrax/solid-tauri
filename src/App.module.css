@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 1.5vmin);
-  background-color: #fff4;
+  background-color: #fff;
 }
 
 .logo {
@@ -28,6 +28,7 @@
   border-radius: 8px;
   padding: 1rem;
   font-size: 1em;
+  background: #fafafa;
 }
 
 .search:focus {
@@ -38,7 +39,7 @@
   height: 20vmin;
   display: flex;
   flex-direction: column;
-  background: #fff;
+  border: 1px solid #555;
   border-radius: 8px;
   padding: 1rem;
   overflow-y: auto;
