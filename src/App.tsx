@@ -3,8 +3,7 @@ import { For, createEffect, createSignal, type Component } from "solid-js";
 import logo from "./logo.svg";
 import styles from "./App.module.css";
 
-import { invoke } from "@tauri-apps/api";
-import { Header } from "./components/header/header";
+import { invoke } from "@tauri-apps/api/core";
 
 const App: Component = () => {
   const [saveText, setSaveText] = createSignal("");
@@ -61,7 +60,6 @@ const App: Component = () => {
 
   return (
     <div class={styles.App}>
-      <Header />
       <div style={{ display: "flex", "flex-direction": "column", gap: "1em" }}>
         <img src={logo} class={styles.logo} alt="logo" />
         <p>

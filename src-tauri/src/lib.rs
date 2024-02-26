@@ -88,20 +88,9 @@ fn log(log: &str) {
     println!("{}", log)
 }
 
-use tauri::Manager;
-use window_vibrancy::apply_acrylic;
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .setup(|app| {
-            let window = app.get_window("main").unwrap();
-
-            apply_acrylic(&window, Some((0, 0, 0, 0)))
-                .expect("Unsupported platform! 'apply_acrylic' is only supported on Windows");
-
-            Ok(())
-        })
         .invoke_handler(tauri::generate_handler![save, word_distance, log])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
