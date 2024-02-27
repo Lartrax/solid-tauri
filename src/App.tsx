@@ -1,4 +1,4 @@
-import { For, createEffect, createSignal, type Component } from "solid-js";
+import { For, createEffect, createSignal, on, type Component } from "solid-js";
 
 import logo from "./logo.svg";
 import styles from "./App.module.css";
@@ -59,13 +59,13 @@ const App: Component = () => {
     setFilteredFoods(filteredFoods);
   });
 
-  createEffect(() => {
+  createEffect(on(isSearching, () => {
     let index = 0;
     const interval = setInterval(() => {
       setSearchText(
         "Search" +
-          " ".repeat(index / (loader.length - 1)) +
-          loader[index % loader.length]
+        " ".repeat(index / (loader.length - 1)) +
+        loader[index % loader.length]
       );
 
       index += 1;
@@ -75,7 +75,7 @@ const App: Component = () => {
         setSearchText("Search...");
       }
     }, 200);
-  });
+  }));
 
   return (
     <div class={styles.App}>
