@@ -2,7 +2,9 @@
 import { render } from 'solid-js/web';
 
 import './index.css';
+import { Route, Router } from '@solidjs/router';
 import App from './App';
+import WordDistance from './pages/WordDistance';
 
 const root = document.getElementById('root');
 
@@ -12,4 +14,9 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
   );
 }
 
-render(() => <App />, root!);
+render(() => (
+  <Router>
+    <Route path="/" component={App} />
+    <Route path="/word-distance" component={WordDistance} />
+  </Router>
+), root!);
