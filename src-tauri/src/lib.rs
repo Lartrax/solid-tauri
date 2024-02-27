@@ -85,7 +85,7 @@ fn word_distance(first: &str, second: &str) -> f32 {
 
 #[tauri::command]
 fn log(log: &str) {
-    println!("{}", log)
+    println!("{}", log.replace('"', ""))
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
