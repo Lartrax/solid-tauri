@@ -6,9 +6,10 @@ import styles from "./App.module.css";
 import { invoke } from "@tauri-apps/api/core";
 
 const App: Component = () => {
-  const [saveText, setSaveText] = createSignal("");
   const [search, setSearch] = createSignal("");
   const [filteredFoods, setFilteredFoods] = createSignal<string[]>([]);
+  const [isSearching, setIsSearching] = createSignal(false);
+  const [searchText, setSearchText] = createSignal("Search...");
 
   const foods = [
     "apple",
@@ -36,6 +37,8 @@ const App: Component = () => {
     "zucchini",
   ];
 
+  const loader = ["..⋅", ".⋅·", "⋅·⋅", "·⋅.", "⋅..", "..."];
+
   const getFilteredFoods = async () => {
     const filteredFoods = await Promise.all(
       foods.map(async (food) => {
@@ -56,15 +59,28 @@ const App: Component = () => {
     setFilteredFoods(filteredFoods);
   });
 
-  invoke<string>("save").then((res) => setSaveText(res));
+  createEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      setSearchText(
+        "Search" +
+          " ".repeat(index / (loader.length - 1)) +
+          loader[index % loader.length]
+      );
+
+      index += 1;
+
+      if (!isSearching()) {
+        clearInterval(interval);
+        setSearchText("Search...");
+      }
+    }, 200);
+  });
 
   return (
     <div class={styles.App}>
       <div style={{ display: "flex", "flex-direction": "column", gap: "1em" }}>
         <img src={logo} class={styles.logo} alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to {saveText()}.
-        </p>
         <a
           class={styles.link}
           href="https://github.com/solidjs/solid"
@@ -78,11 +94,26 @@ const App: Component = () => {
         >
           <input
             class={styles.search}
+            value={search()}
             onInput={(e) => setSearch(e.target.value)}
-            placeholder="Search..."
+            onFocusIn={() => setIsSearching(true)}
+            onFocusOut={() => setIsSearching(false)}
+            onMouseDown={async (e) =>
+              e.button === 2 && setSearch(await navigator.clipboard.readText())
+            }
+            placeholder={searchText()}
           />
           <div class={styles.scrollBox}>
-            <For each={filteredFoods()}>{(food) => <span>{food}</span>}</For>
+            <For each={filteredFoods()}>
+              {(food) => (
+                <span
+                  class={styles.food}
+                  onClick={() => navigator.clipboard.writeText(food)}
+                >
+                  {food}
+                </span>
+              )}
+            </For>
           </div>
         </div>
       </div>
