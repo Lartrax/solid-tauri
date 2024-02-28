@@ -2,11 +2,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 #[tauri::command]
-fn save() -> String {
-    String::from("save")
-}
-
-#[tauri::command]
 fn word_distance(first: &str, second: &str) -> f32 {
     // If first is 3 or larger we check if second contains first
     // This way we avoid calculating distance for obvious words
@@ -83,6 +78,63 @@ fn word_distance(first: &str, second: &str) -> f32 {
     distance
 }
 
+use serde::Serialize;
+
+#[derive(Serialize)]
+struct PrimeResponse {
+    duration: String,
+    primes: Vec<u32>,
+}
+
+#[tauri::command]
+fn get_primes(limit: u32) -> PrimeResponse {
+    let count = limit;
+
+    use std::time::Instant;
+
+    let timer = Instant::now();
+    if count > 20000000 {
+        return PrimeResponse {
+            duration: format!("{:?}", timer.elapsed()),
+            primes: vec![],
+        };
+    }
+    if count < 11 {
+        return PrimeResponse {
+            duration: format!("{:?}", timer.elapsed()),
+            primes: vec![2, 3, 5, 7],
+        };
+    }
+    let mut list_numbers: Vec<u32> = Vec::with_capacity(count as usize - 1);
+
+    list_numbers.push(2);
+    list_numbers.push(3);
+    list_numbers.push(5);
+    for i in 7..=count {
+        if i % 2 == 0 || i % 5 == 0 || i % 3 == 0 {
+            continue;
+        }
+        list_numbers.push(i)
+    }
+
+    let mut index: usize = 3;
+
+    loop {
+        let mut mutable_list_numbers = list_numbers.clone();
+        mutable_list_numbers.retain(|&n| n % list_numbers[index] != 0 || n == list_numbers[index]);
+        list_numbers = mutable_list_numbers;
+        index += 1;
+        if list_numbers[index] * list_numbers[index] >= list_numbers.len() as u32 {
+            break;
+        }
+    }
+
+    PrimeResponse {
+        duration: format!("{:?}", timer.elapsed()),
+        primes: list_numbers,
+    }
+}
+
 #[tauri::command]
 fn log(log: &str) {
     println!("{}", log.replace('"', ""))
@@ -91,7 +143,7 @@ fn log(log: &str) {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![save, word_distance, log])
+        .invoke_handler(tauri::generate_handler![word_distance, log, get_primes])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

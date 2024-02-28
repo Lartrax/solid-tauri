@@ -18,7 +18,7 @@ const Home: Component = () => {
     >
       <p style={{ color: "#5ae", "margin-bottom": "2em" }}>Links to projects</p>
       <Button text="Word distance" onClick={() => navigate("/word-distance")} />
-      <Button text="Prime numbers" onClick={() => navigate("/")} />
+      <Button text="Prime numbers" onClick={() => navigate("/prime-numbers")} />
       <Button text="Placeholder" onClick={() => navigate("/")} />
     </div>
   );

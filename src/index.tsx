@@ -6,6 +6,7 @@ import "./index.css";
 import Home from "./Home";
 import WordDistance from "./pages/WordDistance";
 import Navbar from "./components/Navbar";
+import PrimeNumbers from "./pages/PrimeNumbers";
 
 const root = document.getElementById("root");
 
@@ -29,6 +30,7 @@ render(
     <Router root={App}>
       <Route path="/" component={Home} />
       <Route path="/word-distance" component={WordDistance} />
+      <Route path="/prime-numbers" component={PrimeNumbers} />
     </Router>
   ),
   root!

@@ -39,7 +39,7 @@ const WordDistance: Component = () => {
 
   const loader = ["..⋅", ".⋅·", "⋅·⋅", "·⋅.", "⋅..", "..."];
 
-  const getFilteredFoods = async () => {
+  createEffect(async () => {
     const filteredFoods = await Promise.all(
       foods.map(async (food) => {
         const distance = await invoke<number>("word_distance", {
@@ -51,12 +51,7 @@ const WordDistance: Component = () => {
         }
       })
     );
-    return foods.filter((_, index) => filteredFoods[index]?.food);
-  };
-
-  createEffect(async () => {
-    const filteredFoods = await getFilteredFoods();
-    setFilteredFoods(filteredFoods);
+    setFilteredFoods(foods.filter((_, index) => filteredFoods[index]?.food));
   });
 
   createEffect(
@@ -82,6 +77,7 @@ const WordDistance: Component = () => {
   return (
     <div style={{ display: "flex", "flex-direction": "column", gap: "1em" }}>
       <input
+        type="search"
         class={styles.search}
         value={search()}
         onInput={(e) => setSearch(e.target.value)}
