@@ -1,6 +1,7 @@
 import { For, createEffect, createSignal, on, type Component } from "solid-js";
 
 import styles from "./WordDistance.module.css";
+import Button from "../components/Button";
 
 import { invoke } from "@tauri-apps/api/core";
 
@@ -58,23 +59,25 @@ const WordDistance: Component = () => {
     setFilteredFoods(filteredFoods);
   });
 
-  createEffect(on(isSearching, () => {
-    let index = 0;
-    const interval = setInterval(() => {
-      setSearchText(
-        "Search" +
-        // " ".repeat(index / (loader.length - 1)) +
-        loader[index % loader.length]
-      );
+  createEffect(
+    on(isSearching, () => {
+      let index = 0;
+      const interval = setInterval(() => {
+        setSearchText(
+          "Search" +
+            // " ".repeat(index / (loader.length - 1)) +
+            loader[index % loader.length]
+        );
 
-      index += 1;
+        index += 1;
 
-      if (!isSearching()) {
-        clearInterval(interval);
-        setSearchText("Search...");
-      }
-    }, 200);
-  }));
+        if (!isSearching()) {
+          clearInterval(interval);
+          setSearchText("Search...");
+        }
+      }, 200);
+    })
+  );
 
   return (
     <div style={{ display: "flex", "flex-direction": "column", gap: "1em" }}>
@@ -92,12 +95,11 @@ const WordDistance: Component = () => {
       <div class={styles.scrollBox}>
         <For each={filteredFoods()}>
           {(food) => (
-            <span
-              class={styles.food}
+            <Button
+              text={food}
+              style={{ border: "none" }}
               onClick={() => navigator.clipboard.writeText(food)}
-            >
-              {food}
-            </span>
+            />
           )}
         </For>
       </div>
