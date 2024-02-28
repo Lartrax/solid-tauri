@@ -12,9 +12,23 @@
   outline: none;
 }
 
+.mathBox {
+  display: flex;
+  row-gap: 1em;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .mathBox {
+    flex-direction: column;
+  }
+}
+
 .scrollBox {
   height: 50vh;
+  min-width: 50vw;
   max-width: 70vw;
+  align-self: center;
   display: flex;
   flex-direction: column;
   border: 1px solid #555;

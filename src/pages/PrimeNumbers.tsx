@@ -29,7 +29,7 @@ const PrimeNumbers: Component = () => {
 
   return (
     <div style={{ display: "flex", "flex-direction": "column", gap: "1em" }}>
-      <div style={{ display: "flex" }}>
+      <div class={styles.mathBox}>
         <input
           type="text"
           class={styles.input}
@@ -49,33 +49,35 @@ const PrimeNumbers: Component = () => {
           }
           placeholder="Limit"
         />
-        <IconButton
-          icon="max"
-          style={{
-            "border-top-left-radius": "0.5rem",
-            "border-bottom-left-radius": "0.5rem",
-            "margin-left": "0.5em",
-          }}
-          onClick={() => setLimit(20000000)}
-        />
-        <IconButton
-          icon="½"
-          onClick={() => setLimit((prev) => Math.round((prev ?? 0) / 2))}
-        />
-        <IconButton
-          icon="¾"
-          onClick={() =>
-            setLimit((prev) => Math.round((prev ?? 0) - (prev ?? 0) / 4))
-          }
-        />
-        <IconButton
-          icon="⅒"
-          style={{
-            "border-top-right-radius": "0.5rem",
-            "border-bottom-right-radius": "0.5rem",
-          }}
-          onClick={() => setLimit((prev) => Math.round((prev ?? 0) / 10))}
-        />
+        <span style={{ display: "flex" }}>
+          <IconButton
+            icon="max"
+            style={{
+              "border-top-left-radius": "0.5rem",
+              "border-bottom-left-radius": "0.5rem",
+              "margin-left": "0.5em",
+            }}
+            onClick={() => setLimit(20000000)}
+          />
+          <IconButton
+            icon="½"
+            onClick={() => setLimit((prev) => Math.round((prev ?? 0) / 2))}
+          />
+          <IconButton
+            icon="¾"
+            onClick={() =>
+              setLimit((prev) => Math.round((prev ?? 0) - (prev ?? 0) / 4))
+            }
+          />
+          <IconButton
+            icon="⅒"
+            style={{
+              "border-top-right-radius": "0.5rem",
+              "border-bottom-right-radius": "0.5rem",
+            }}
+            onClick={() => setLimit((prev) => Math.round((prev ?? 0) / 10))}
+          />
+        </span>
       </div>
       <Button text="Get primes" onClick={() => getPrimes()} />
       <p>Time: {response()?.duration}</p>

@@ -43,7 +43,7 @@ const WordDistance: Component = () => {
     const filteredFoods = await Promise.all(
       foods.map(async (food) => {
         const distance = await invoke<number>("word_distance", {
-          first: search(),
+          first: search().toLowerCase(),
           second: food,
         });
         if (distance < Math.min(Math.max(search().length - 2, 2), 5)) {
@@ -60,8 +60,8 @@ const WordDistance: Component = () => {
       const interval = setInterval(() => {
         setSearchText(
           "Search" +
-            // " ".repeat(index / (loader.length - 1)) +
-            loader[index % loader.length]
+          // " ".repeat(index / (loader.length - 1)) +
+          loader[index % loader.length]
         );
 
         index += 1;

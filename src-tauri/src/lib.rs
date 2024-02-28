@@ -11,15 +11,15 @@ fn word_distance(first: &str, second: &str) -> f32 {
 
     // Set base to longest
     let base: Vec<char> = if first.len() > second.len() {
-        first.to_lowercase().chars().collect()
+        first.chars().collect()
     } else {
-        second.to_lowercase().chars().collect()
+        second.chars().collect()
     };
 
     let comp: Vec<char> = if first.len() > second.len() {
-        second.to_lowercase().chars().collect()
+        second.chars().collect()
     } else {
-        first.to_lowercase().chars().collect()
+        first.chars().collect()
     };
 
     let mut distance = 0.0;
