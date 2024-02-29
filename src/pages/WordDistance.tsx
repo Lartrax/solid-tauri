@@ -5,12 +5,14 @@ import Button from "../components/Button";
 import InputField from "../components/InputField";
 
 import { invoke } from "@tauri-apps/api/core";
+import { logger } from "../functions";
 
 const WordDistance: Component = () => {
-  const [search, setSearch] = createSignal("");
+  const [search, setSearch] = createSignal("charee");
   const [filteredFoods, setFilteredFoods] = createSignal<string[]>([]);
   const [isSearching, setIsSearching] = createSignal(false);
   const [searchText, setSearchText] = createSignal("Search...");
+  const [selectedFood, setSelectedFood] = createSignal("cherry");
 
   const foods = [
     "apple",
@@ -41,12 +43,18 @@ const WordDistance: Component = () => {
   const loader = ["..⋅", ".⋅·", "⋅·⋅", "·⋅.", "⋅..", "..."];
 
   createEffect(async () => {
+    logger(
+      "________|||  " +
+        Math.min(Math.max(search().length - 2, 2), 5) +
+        "  |||________"
+    );
     const filteredFoods = await Promise.all(
       foods.map(async (food) => {
         const distance = await invoke<number>("word_distance", {
           first: search().toLowerCase(),
           second: food,
         });
+        logger(food + " " + JSON.stringify(distance));
         if (distance < Math.min(Math.max(search().length - 2, 2), 5)) {
           return { food, distance };
         }
@@ -89,19 +97,74 @@ const WordDistance: Component = () => {
         }
         placeholder={searchText()}
       />
-      <div class={styles.scrollBox}>
-        <For each={filteredFoods()}>
-          {(food) => (
-            <Button
-              text={food}
-              style={{ border: "none" }}
-              onClick={() => navigator.clipboard.writeText(food)}
-            />
-          )}
-        </For>
+      <div
+        class={styles.scrollBox}
+        style={selectedFood() && { "min-height": "1em" }}
+      >
+        {selectedFood() ? (
+          <Button
+            text={selectedFood()}
+            style={{ border: "none" }}
+            onClick={() => setSelectedFood("")}
+          />
+        ) : (
+          <For each={filteredFoods()}>
+            {(food) => (
+              <Button
+                text={food}
+                style={{ border: "none" }}
+                onClick={() => setSelectedFood(food)}
+              />
+            )}
+          </For>
+        )}
       </div>
+      {selectedFood() && (
+        <div
+          style={{
+            background: "#fafafa",
+            border: "1px solid #eee",
+            padding: "1em",
+            display: "flex",
+            "flex-direction": "column",
+            "align-items": "center",
+          }}
+        >
+          <p>Breakdown</p>
+          <br />
+          <div style={{ "text-align": "left" }}>
+            <span style={{ display: "flex", gap: "1em" }}>
+              <For each={search().split("")}>
+                {(char) => <p style={{ width: "1em" }}>{char}</p>}
+              </For>
+            </span>
+            <span style={{ display: "flex", gap: "1em" }}>
+              <For each={"↓↓ ↓↓ ".split("")}>
+                {(char) => <p style={{ width: "1em" }}>{char}</p>}
+              </For>
+            </span>
+            <span style={{ display: "flex", gap: "1em" }}>
+              <For each={"↓↓ ↙  ".split("")}>
+                {(char) => <p style={{ width: "1em" }}>{char}</p>}
+              </For>
+            </span>
+            <span style={{ display: "flex", gap: "1em" }}>
+              <For each={"↓↓↓↓↶↶".split("")}>
+                {(char) => <p style={{ width: "1em" }}>{char}</p>}
+              </For>
+            </span>
+            <span style={{ display: "flex", gap: "1em" }}>
+              <For each={selectedFood().split("")}>
+                {(char) => <p style={{ width: "1em" }}>{char}</p>}
+              </For>
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default WordDistance;
+
+// charset ↓←→↞↠↶-↙↘
