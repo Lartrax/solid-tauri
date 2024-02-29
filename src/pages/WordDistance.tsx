@@ -2,6 +2,7 @@ import { For, createEffect, createSignal, on, type Component } from "solid-js";
 
 import styles from "./WordDistance.module.css";
 import Button from "../components/Button";
+import InputField from "../components/InputField";
 
 import { invoke } from "@tauri-apps/api/core";
 
@@ -60,8 +61,8 @@ const WordDistance: Component = () => {
       const interval = setInterval(() => {
         setSearchText(
           "Search" +
-          // " ".repeat(index / (loader.length - 1)) +
-          loader[index % loader.length]
+            // " ".repeat(index / (loader.length - 1)) +
+            loader[index % loader.length]
         );
 
         index += 1;
@@ -76,7 +77,7 @@ const WordDistance: Component = () => {
 
   return (
     <div style={{ display: "flex", "flex-direction": "column", gap: "1em" }}>
-      <input
+      <InputField
         type="search"
         class={styles.search}
         value={search()}

@@ -40,6 +40,11 @@
     border: #f5f5f5 1px solid;
     text-decoration: none;
     color: #222;
+
+    height: 4vmax;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .button:hover {

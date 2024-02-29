@@ -17,4 +17,9 @@
     display: flex;
     background: #5af;
     cursor: pointer;
+    transition-duration: 100ms;
+}
+
+.navbar:active {
+    background: #5afe;
 }

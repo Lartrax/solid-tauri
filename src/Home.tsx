@@ -16,7 +16,7 @@ const Home: Component = () => {
         width: "30vmax",
       }}
     >
-      <p style={{ color: "#5ae", "margin-bottom": "2em" }}>Links to projects</p>
+      <p class={styles.title}>Links to projects</p>
       <Button text="Word distance" onClick={() => navigate("/word-distance")} />
       <Button text="Prime numbers" onClick={() => navigate("/prime-numbers")} />
       <Button text="Placeholder" onClick={() => navigate("/")} />

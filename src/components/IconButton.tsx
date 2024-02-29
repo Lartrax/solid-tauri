@@ -15,9 +15,7 @@ const IconButton: Component<buttonProps> = ({ icon, onClick, style }) => {
       onClick={onClick}
       style={{
         ...style,
-        display: "flex",
-        "justify-content": "center",
-        "align-items": "center",
+        height: "auto",
         "font-size": "1.5em",
         "font-weight": "350",
         "line-height": "1.5em",
