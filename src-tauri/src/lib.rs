@@ -1,25 +1,32 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use serde::Serialize;
+
+#[derive(Serialize)]
+enum Moveset {
+    Use,
+    Move1Back,
+    Move2Back,
+    Move1Forth,
+    Move2Forth,
+    Add,
+}
+#[derive(Serialize)]
+struct WordDistanceResponse {
+    distance: f32,
+    moves: Vec<Moveset>,
+}
+
 #[tauri::command]
-fn word_distance(first: &str, second: &str) -> f32 {
-    // If first is 3 or larger we check if second contains first
-    // This way we avoid calculating distance for obvious words
-    if second.contains(first) && first.len() > 2 {
-        return 0.0;
-    }
+fn word_distance(first: &str, second: &str) -> WordDistanceResponse {
+    let base: Vec<char> = first.chars().collect();
+    let comp: Vec<char> = second.chars().collect();
 
-    // Set base to longest
-    let base: Vec<char> = if first.len() > second.len() {
-        first.chars().collect()
+    let length: usize = if base.len() > comp.len() {
+        base.len()
     } else {
-        second.chars().collect()
-    };
-
-    let comp: Vec<char> = if first.len() > second.len() {
-        second.chars().collect()
-    } else {
-        first.chars().collect()
+        comp.len()
     };
 
     let mut distance = 0.0;
@@ -27,17 +34,17 @@ fn word_distance(first: &str, second: &str) -> f32 {
     #[derive(Debug, Clone)]
     struct Moves {
         use_char: bool,
-        move_char: (bool, usize),
+        move_char: (bool, f32),
         add_char: bool,
     }
 
     let mut movement_construct = vec![
         Moves {
             use_char: false,
-            move_char: (false, 0),
+            move_char: (false, 0.0),
             add_char: false
         };
-        base.len()
+        length
     ];
 
     for (i, base_char) in base.clone().into_iter().enumerate() {
@@ -49,7 +56,7 @@ fn word_distance(first: &str, second: &str) -> f32 {
 
             // Action: Move; Because chars are the same but indices are different
             if base_char == comp_char && i != j {
-                let diff = i.abs_diff(j);
+                let diff = i as f32 - j as f32;
                 movement_construct[i].move_char.0 = true;
                 movement_construct[i].move_char.1 = diff;
             }
@@ -61,24 +68,48 @@ fn word_distance(first: &str, second: &str) -> f32 {
         }
     }
 
+    let mut moveset: Vec<Moveset> = vec![];
+
     // Calcualte cost based on best moves: use > move > add
     for movement in movement_construct.clone() {
         if movement.use_char {
             // No distance added
-        } else if movement.move_char.0 && movement.move_char.1 < 3 {
+            moveset.push(Moveset::Use)
+        } else if movement.move_char.0 && movement.move_char.1 < 3.0 {
             // Only move chars if it is less costly than adding /\
             // Add 0.4 for each index moved
-            distance += movement.move_char.1 as f32 * 0.4
+            distance += movement.move_char.1.abs() * 0.4;
+
+            if movement.move_char.1 == -2.0 {
+                moveset.push(Moveset::Move2Back);
+            } else if movement.move_char.1 == -1.0 {
+                moveset.push(Moveset::Move1Back);
+            } else if movement.move_char.1 == 1.0 {
+                moveset.push(Moveset::Move1Forth);
+            } else if movement.move_char.1 == 2.0 {
+                moveset.push(Moveset::Move2Forth);
+            }
         } else if movement.add_char {
             // Add 1 for adding new char
-            distance += 1.0
+            distance += 1.0;
+            moveset.push(Moveset::Add)
         }
     }
 
-    distance
-}
+    // If first is 3 or larger we check if second contains first
+    // This way we avoid calculating distance for obvious words
+    if second.contains(first) && first.len() > 2 {
+        return WordDistanceResponse {
+            distance: 0.0,
+            moves: moveset,
+        };
+    }
 
-use serde::Serialize;
+    WordDistanceResponse {
+        distance,
+        moves: moveset,
+    }
+}
 
 #[derive(Serialize)]
 struct PrimeResponse {
