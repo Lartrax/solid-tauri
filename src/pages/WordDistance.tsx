@@ -118,7 +118,7 @@ const WordDistance: Component = () => {
         const canvas = document.getElementById("canvas") as HTMLCanvasElement;
         const ctx = canvas?.getContext("2d");
 
-        if (ctx && moves().length > 0) {
+        if (ctx) {
           drawLines(ctx, moves());
         }
       }
@@ -249,7 +249,15 @@ const WordDistance: Component = () => {
                 {(char) => <p style={{ width: "1em" }}>{char}</p>}
               </For>
             </span>
-            <canvas id="canvas" class={styles.canvas} />
+            <canvas
+              id="canvas"
+              class={styles.canvas}
+              style={
+                search().length > selectedFood().length
+                  ? { transform: "scaleY(-1)" }
+                  : {}
+              }
+            />
             <span style={{ display: "flex", gap: "1em" }}>
               <For each={selectedFood().split("")}>
                 {(char) => <p style={{ width: "1em" }}>{char}</p>}

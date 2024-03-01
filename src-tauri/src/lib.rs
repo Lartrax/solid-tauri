@@ -20,8 +20,18 @@ struct WordDistanceResponse {
 
 #[tauri::command]
 fn word_distance(first: &str, second: &str) -> WordDistanceResponse {
-    let base: Vec<char> = first.chars().collect();
-    let comp: Vec<char> = second.chars().collect();
+    // Set base to longest
+    let base: Vec<char> = if first.len() > second.len() {
+        first.chars().collect()
+    } else {
+        second.chars().collect()
+    };
+
+    let comp: Vec<char> = if first.len() > second.len() {
+        second.chars().collect()
+    } else {
+        first.chars().collect()
+    };
 
     let length: usize = if base.len() > comp.len() {
         base.len()
