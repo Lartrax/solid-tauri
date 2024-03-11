@@ -7,7 +7,7 @@ import Home from "./Home";
 import WordDistance from "./pages/WordDistance";
 import Navbar from "./components/Navbar";
 import PrimeNumbers from "./pages/PrimeNumbers";
-import Placeholder from "./pages/Placeholder";
+import ApiGui from "./pages/ApiGui";
 
 const root = document.getElementById("root");
 
@@ -32,7 +32,7 @@ render(
       <Route path="/" component={Home} />
       <Route path="/word-distance" component={WordDistance} />
       <Route path="/prime-numbers" component={PrimeNumbers} />
-      <Route path="/placeholder" component={Placeholder} />
+      <Route path="/api-gui" component={ApiGui} />
     </Router>
   ),
   root!

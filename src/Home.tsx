@@ -19,7 +19,7 @@ const Home: Component = () => {
       <p class={styles.title}>Links to projects</p>
       <Button text="Word distance" onClick={() => navigate("/word-distance")} />
       <Button text="Prime numbers" onClick={() => navigate("/prime-numbers")} />
-      <Button text="Placeholder" onClick={() => navigate("/placeholder")} />
+      <Button text="API GUI" onClick={() => navigate("/api-gui")} />
     </div>
   );
 };

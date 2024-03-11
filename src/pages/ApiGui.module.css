@@ -1,0 +1,13 @@
+.list {
+    width: 100%;
+    align-self: center;
+    border: none;
+    border-radius: 0.5em;
+    padding: 1rem;
+    font-size: 1em;
+    background: #fafafa;
+}
+
+.list:focus {
+    outline: none;
+}
