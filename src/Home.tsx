@@ -19,6 +19,10 @@ const Home: Component = () => {
       <p class={styles.title}>Links to projects</p>
       <Button text="Word distance" onClick={() => navigate("/word-distance")} />
       <Button text="Prime numbers" onClick={() => navigate("/prime-numbers")} />
+      <Button
+        text="Sorting Algorithms"
+        onClick={() => navigate("/sorting-algorithms")}
+      />
       <Button text="API GUI" onClick={() => navigate("/api-gui")} />
     </div>
   );
