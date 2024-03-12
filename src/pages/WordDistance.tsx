@@ -65,6 +65,11 @@ const WordDistance: Component = () => {
     on([selectedFood, search], async () => {
       const threshold = Math.min(Math.max(search().length - 2, 2), 5);
 
+      if (!search()) {
+        setFilteredFoods(foods);
+        return;
+      }
+
       // Get word-distance
       const filteredFoods = await Promise.all(
         foods.map(async (food) => {
@@ -249,15 +254,7 @@ const WordDistance: Component = () => {
                 {(char) => <p style={{ width: "1em" }}>{char}</p>}
               </For>
             </span>
-            <canvas
-              id="canvas"
-              class={styles.canvas}
-              style={
-                search().length > selectedFood().length
-                  ? { transform: "scaleY(-1)" }
-                  : {}
-              }
-            />
+            <canvas id="canvas" class={styles.canvas} />
             <span style={{ display: "flex", gap: "1em" }}>
               <For each={selectedFood().split("")}>
                 {(char) => <p style={{ width: "1em" }}>{char}</p>}
