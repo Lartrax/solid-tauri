@@ -173,6 +173,140 @@ fn get_primes(limit: u32) -> PrimeResponse {
     }
 }
 
+fn random_number(start: usize, end: usize) -> usize {
+    use rand::Rng;
+
+    let mut rng = rand::thread_rng();
+    rng.gen_range(start..=end)
+}
+
+#[derive(Serialize)]
+struct SortResponse {
+    duration: String,
+    iterations: String,
+    sorted: Vec<u32>,
+}
+
+#[tauri::command]
+fn get_sort(sort_type: String, length: usize, span: usize) -> SortResponse {
+    use std::time::Instant;
+    let timer = Instant::now();
+    let mut iterations = 0;
+
+    let mut unsorted_vec: Vec<u32> = Vec::with_capacity(length);
+
+    for _ in 0..length {
+        unsorted_vec.push(random_number(0, span).try_into().unwrap());
+    }
+
+    let sorted_vec: Vec<u32> = if sort_type == "fullbogo" {
+        let full_bogo_sorted = full_bogo(unsorted_vec);
+        iterations = full_bogo_sorted.1;
+        full_bogo_sorted.0
+    } else if sort_type == "bogo" {
+        let bogo_sorted = bogo(unsorted_vec);
+        iterations = bogo_sorted.1;
+        bogo_sorted.0
+    } else if sort_type == "timsort" {
+        let mut sorted = unsorted_vec;
+        sorted.sort();
+        sorted
+    } else if sort_type == "counting_btree" {
+        let new_sorted = counting_btree(unsorted_vec);
+        iterations = new_sorted.1;
+        new_sorted.0
+    } else {
+        vec![]
+    };
+
+    SortResponse {
+        duration: format!("{:?}", timer.elapsed()),
+        iterations: iterations
+            .to_string()
+            .as_bytes()
+            .rchunks(3)
+            .rev()
+            .map(std::str::from_utf8)
+            .collect::<Result<Vec<&str>, _>>()
+            .unwrap()
+            .join(" "),
+        sorted: sorted_vec,
+    }
+}
+
+fn full_bogo(unsorted: Vec<u32>) -> (Vec<u32>, u32) {
+    let mut pre_sorted_vec = unsorted.clone();
+    pre_sorted_vec.sort();
+
+    let mut iterations = 0;
+
+    let mut sorted_vec = vec![0; unsorted.len()];
+
+    while pre_sorted_vec != sorted_vec {
+        for num in unsorted.clone() {
+            let rand_index = random_number(0, unsorted.len() - 1);
+            sorted_vec[rand_index] = num;
+            iterations += 1;
+        }
+    }
+    (sorted_vec, iterations)
+}
+
+fn bogo(mut unsorted: Vec<u32>) -> (Vec<u32>, u32) {
+    let mut pre_sorted_vec = unsorted.clone();
+    pre_sorted_vec.sort();
+
+    let mut iterations = 0;
+
+    while pre_sorted_vec != unsorted {
+        for (i, _) in unsorted.clone().into_iter().enumerate() {
+            let rand_index = random_number(0, unsorted.len() - 1);
+            unsorted.swap(i, rand_index);
+            iterations += 1;
+        }
+    }
+    (unsorted, iterations)
+}
+
+fn counting_btree(unsorted: Vec<u32>) -> (Vec<u32>, u32) {
+    use std::collections::BTreeMap;
+    // BTreeMap: Number, Count
+    let mut number_list: BTreeMap<u32, u32> = BTreeMap::new();
+
+    let length = unsorted.len();
+
+    let mut iterations = 0;
+
+    for num in unsorted {
+        // Does the same as:
+        // if number_list.contains_key(&num) {
+        //     number_list.entry(num).and_modify(|e| *e += 1);
+        // } else {
+        //     number_list.insert(num, 1);
+        // }
+        // But requires only 1 lookup instead of 2
+        // https://github.com/rust-lang/rust-clippy/issues/1774
+        // Checks if entry is vacant and inserts into vacant entry if empty else it increases count of existing entry
+        if let std::collections::btree_map::Entry::Vacant(e) = number_list.entry(num) {
+            e.insert(1);
+        } else {
+            number_list.entry(num).and_modify(|e| *e += 1);
+        }
+
+        iterations += 1;
+    }
+
+    let mut sorted: Vec<u32> = Vec::with_capacity(length);
+
+    for item in number_list {
+        for _ in 0..item.1 {
+            sorted.push(item.0);
+        }
+    }
+
+    (sorted, iterations)
+}
+
 #[tauri::command]
 fn log(log: &str) {
     println!("{}", log.replace('"', ""))
@@ -181,7 +315,12 @@ fn log(log: &str) {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![word_distance, log, get_primes])
+        .invoke_handler(tauri::generate_handler![
+            word_distance,
+            log,
+            get_primes,
+            get_sort
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

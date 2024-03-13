@@ -1,19 +1,23 @@
-.mathBox {
-  display: flex;
-  row-gap: 1em;
-  align-items: center;
+.list {
+  width: 100%;
+  align-self: center;
+  border: none;
+  border-radius: 0.5em;
+  padding: 1rem;
+  font-size: 1em;
+  background: #fafafa;
+  border-right: 1rem solid #fafafa;
+  cursor: pointer;
 }
 
-@media (max-width: 600px) {
-  .mathBox {
-    flex-direction: column;
-  }
+.list:focus {
+  outline: none;
 }
 
 .scrollBox {
   height: 50vh;
   min-width: 50vw;
-  width: auto;
+  max-width: 70vw;
   align-self: center;
   display: flex;
   flex-direction: column;
