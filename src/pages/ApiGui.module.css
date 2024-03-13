@@ -1,5 +1,5 @@
 .list {
-    width: 6em;
+    width: "auto";
     align-self: center;
     border: none;
     border-radius: 0.5em;
@@ -7,11 +7,46 @@
     font-size: 1em;
     background: #fafafa;
     border-right: 1rem solid #fafafa;
+    cursor: pointer;
 }
 
 .list:focus {
     outline: none;
 }
+
+.showSmall {
+    display: none;
+}
+
+.showLarge {
+    display: flex;
+}
+
+.interactivesBox {
+    display: flex;
+    gap: 1em
+}
+
+@media (max-width: 600px) {
+    .list {
+        width: 100%;
+    }
+
+    .showSmall {
+        display: flex;
+    }
+
+    .showLarge {
+        display: none;
+    }
+
+    .interactivesBox {
+        flex-direction: column;
+    }
+
+}
+
+
 
 .scrollBox {
     height: 50vh;

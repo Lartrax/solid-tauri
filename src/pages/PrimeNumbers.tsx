@@ -79,14 +79,14 @@ const PrimeNumbers: Component = () => {
           />
         </span>
       </div>
-      <Button text="Get primes" onClick={() => getPrimes()} />
+      <Button text="Get primes" onClick={getPrimes} />
       <p>Time: {response()?.duration}</p>
       <div class={styles.scrollBox}>
         <span
           class={styles.loader}
           style={{ display: isLoading() ? "flex" : "none" }}
         >
-          loading
+          sieving
         </span>
         {response()?.primes.toString()}
       </div>

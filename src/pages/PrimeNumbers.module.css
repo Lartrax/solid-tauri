@@ -13,7 +13,7 @@
 .scrollBox {
   height: 50vh;
   min-width: 50vw;
-  max-width: 70vw;
+  width: auto;
   align-self: center;
   display: flex;
   flex-direction: column;

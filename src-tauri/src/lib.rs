@@ -188,7 +188,7 @@ struct SortResponse {
 }
 
 #[tauri::command]
-fn sort(sort_type: String, length: usize, span: usize) -> SortResponse {
+fn get_sort(sort_type: String, length: usize, span: usize) -> SortResponse {
     use std::time::Instant;
     let timer = Instant::now();
     let mut iterations = 0;
@@ -319,7 +319,7 @@ pub fn run() {
             word_distance,
             log,
             get_primes,
-            sort
+            get_sort
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

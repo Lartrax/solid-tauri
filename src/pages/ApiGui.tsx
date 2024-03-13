@@ -29,28 +29,37 @@ const ApiGui: Component = () => {
 
   return (
     <div style={{ display: "flex", "flex-direction": "column", gap: "1em" }}>
-      <div style={{ display: "flex", gap: "1em" }}>
-        <select
-          class={styles.list}
-          value={method()}
-          onChange={(e) => setMethod(e.target.value as Method)}
-        >
-          <option value="GET">GET</option>
-          <option value="POST">POST</option>
-          <option value="PUT">PUT</option>
-          <option value="DELETE">DELETE</option>
-        </select>
-        <InputField
-          type="text"
-          value={url()}
-          onInput={(e) => setUrl(e.target.value)}
-          onKeyPress={(e) =>
-            e.key === "Enter" && url().length > 3 && fetchFromUrl()
-          }
-          placeholder="api.endpoint.com/parameter"
-        />
-        <IconButton icon="⇅" onClick={fetchFromUrl} />
-      </div>
+      <span class={styles.interactivesBox}>
+        <span style={{ display: "flex", gap: "1em" }}>
+          <select
+            class={styles.list}
+            value={method()}
+            onChange={(e) => setMethod(e.target.value as Method)}
+          >
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="DELETE">DELETE</option>
+          </select>
+          <span class={styles.showSmall}>
+            <IconButton icon="⇅" onClick={fetchFromUrl} />
+          </span>
+        </span>
+        <span style={{ display: "flex", gap: "1em" }}>
+          <InputField
+            type="text"
+            value={url()}
+            onInput={(e) => setUrl(e.target.value)}
+            onKeyPress={(e) =>
+              e.key === "Enter" && url().length > 3 && fetchFromUrl()
+            }
+            placeholder="api.endpoint.com/parameter"
+          />
+          <span class={styles.showLarge}>
+            <IconButton icon="⇅" onClick={fetchFromUrl} />
+          </span>
+        </span>
+      </span>
       <div class={styles.scrollBox}>
         <span
           class={styles.loader}
